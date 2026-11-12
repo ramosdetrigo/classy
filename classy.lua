@@ -4,6 +4,7 @@
 local Object = {}
 Object.__super = nil
 Object.__name = "Object"
+Object.__index = Object
 
 local classy = {}
 local class_db = { [Object.__name] = Object }
@@ -15,10 +16,9 @@ local format = string.format
 
 --- The initialization function of the objects. You should override this for your own classes.
 --- **This function will be used internally, you should not use this function manually. Only create new objects by calling the class as a function.**
----@param ...? any The optional parameters of the class creation function.
+---@param ... any? The optional parameters of the class creation function.
 ---@return nil
-function Object:init(...)
-end
+function Object:init(...) end
 
 --- Implement other classes' methods in this class.
 ---@param ...? Class|string The other classes
@@ -69,7 +69,7 @@ function Object:__name_tree()
   return name
 end
 
----@return table
+---@return Object
 function Object:__call(...)
   ---@class Object: Class
   ---@field __class Class the class of the object
@@ -125,6 +125,7 @@ function classy.class(class_name, super, ...)
   new_class.__name = class_name
   new_class.__super = super
   new_class.__class = new_class
+  new_class.__index = new_class
   setmetatable(new_class, super)
 
   new_class:implement(...)
