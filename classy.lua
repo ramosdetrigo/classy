@@ -6,13 +6,7 @@ Object.__super = nil
 Object.__name = "Object"
 Object.__index = Object
 
-local classy = {}
-local class_db_index = setmetatable({}, { __mode = "v" })
-local class_db = setmetatable(
-  { [Object.__name] = Object },
-  { __index = class_db_index, __newindex = class_db_index }
-)
-
+local class_db = { [Object.__name] = Object }
 local format = string.format
 
 -------------------------------------
@@ -87,6 +81,8 @@ end
 ----- LIBRARY FUNCTIONS -----
 -----------------------------
 
+local classy = {}
+
 --- Class-creating function. The class creation and usage process should be as following:
 --- 1. Create the new class with this function
 --- 2. Create the object initialization function by overriding the new_class:init(...) function
@@ -152,8 +148,14 @@ end
 ---@param ... any
 ---@return table
 function classy.instantiate(class_name, ...)
-  assert(class_db[class_name], format("Class %q doesn't exist.", class_name))
-  return class_db[class_name](...)
+    assert(class_db[class_name], format("Class %q doesn't exist.", class_name))
+    return class_db[class_name](...)
+end
+
+--- Deletes a class from the internal class_db
+---@param class_name string
+function classy.delete_class(class_name)
+  class_db[class_name] = nil
 end
 
 return classy
