@@ -7,7 +7,12 @@ Object.__name = "Object"
 Object.__index = Object
 
 local classy = {}
-local class_db = { [Object.__name] = Object }
+local class_db_index = setmetatable({}, { __mode = "v" })
+local class_db = setmetatable(
+  { [Object.__name] = Object },
+  { __index = class_db_index, __newindex = class_db_index }
+)
+
 local format = string.format
 
 -------------------------------------
