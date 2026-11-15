@@ -30,7 +30,7 @@ function Object:implement(...)
     if class == nil then goto continue end
     for k, v in pairs(class) do
       -- Do not copy meta fields
-      if k:find("__", 1, true) ~= 1 and self[k] == nil then
+      if type(k) == "string" and k:find("__", 1, true) ~= 1 then
         self[k] = v
       end
     end
